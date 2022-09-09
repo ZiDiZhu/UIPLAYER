@@ -13,6 +13,8 @@ public class SliderController : MonoBehaviour
 
     public GameObject[] lamp_models;//catalogue of all lamps
 
+    public Slider lightIntensitySlider;
+
 
     [SerializeField]
     List<GameObject> lamp_built; //currently in the scene
@@ -34,6 +36,8 @@ public class SliderController : MonoBehaviour
         valueText.text = (val*displayMultiplier).ToString();
 
         MakeARowOf(lamp_prefab,val);
+        ToggleForAll();
+        LightIntensity();
     }
 
     public void MakeARowOf(GameObject thing, float densityValue){
@@ -66,10 +70,19 @@ public class SliderController : MonoBehaviour
 
     }
 
+    public void LightIntensity(){
+        for (int i=0; i<lamp_built.Count;i++){
+            GameObject light;
+            light = lamp_built[i].gameObject.transform.GetChild(0).GetChild(0).gameObject;
+            light.GetComponent<Light>().intensity = lightIntensitySlider.value;
+        }
+    }
+
     public void ToggleForAll(){
         for (int i=0; i<lamp_built.Count;i++){
-            Destroy(lamp_built[i]);
-            lamp_built.RemoveAt(i);
+            GameObject light;
+            light = lamp_built[i].gameObject.transform.GetChild(0).GetChild(0).gameObject;
+            light.SetActive(!light.activeSelf);
         }
     }
 
